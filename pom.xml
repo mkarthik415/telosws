@@ -46,7 +46,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <version>1.4.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -75,12 +75,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
+<!--            <exclusions>
                 <exclusion>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
@@ -102,19 +102,9 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>4.1.4.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -213,38 +203,7 @@
 
 
 	<profiles>
-		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when
-				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app
-				will need. -->
-			<!-- By default that is to put the resulting archive into the 'webapps'
-				folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-			<id>openshift</id>
-			<build>
-				<finalName>telosws</finalName>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>webapps</outputDirectory>
-							<warName>ROOT</warName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
         <profile>
-            <!-- When built in OpenShift the 'openshift' profile will be used when
-                invoking mvn. -->
-            <!-- Use this profile for any OpenShift specific customization your app
-                will need. -->
-            <!-- By default that is to put the resulting archive into the 'webapps'
-                folder. -->
-            <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
             <id>development</id>
             <build>
                 <finalName>telosws</finalName>
@@ -257,22 +216,6 @@
                             <warName>ROOT</warName>
                         </configuration>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.zeroturnaround</groupId>
-                        <artifactId>jrebel-maven-plugin</artifactId>
-                        <version>1.1.5</version>
-                        <executions>
-                            <execution>
-                                <id>generate-rebel-xml</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
