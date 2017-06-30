@@ -16,11 +16,15 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import telosws.beans.Clients;
 import telosws.beans.Document;
 import telosws.dao.TelosWSDaoImpl;
@@ -55,8 +59,8 @@ public class EmailService implements EmailServiceInterf {
     private TelosWSDaoImpl daoImpl;
 
     @Autowired
-    private VelocityEngine engine;
-
+    private TemplateEngine templateEngine;
+    
     @Value("${google.p12.path}")
     private String mypath;
 
@@ -65,6 +69,10 @@ public class EmailService implements EmailServiceInterf {
 
     @Value("${google.originMailAddress}")
     private String googleOriginMailAddress;
+
+    @Autowired
+    @Qualifier("javaMailConfig")
+    private JavaMailSender javaMailSender;
 
     /**
      * View and manage your mail.
@@ -77,19 +85,20 @@ public class EmailService implements EmailServiceInterf {
 
     public void sendEmails(String subject,Clients client) throws IOException, InterruptedException, GeneralSecurityException, MessagingException {
 
-        Gmail gmailService = getGmailServiceSetup();
+//        Gmail gmailService = getGmailServiceSetup();
 
         List<Document> totalDocuments = daoImpl.searchDocumentsByClient(client);
 
         MimeMessage email = createMimeMessage("mkarthik415@gmail.com", googleOriginMailAddress, subject, getMessageForRenewals(client), totalDocuments);
 
-        Message message = createMessageWithEmail(email);
-        message = gmailService.users().messages().send(googleOriginMailAddress, message).execute();
+//        Message message = createMessageWithEmail(email);
+        javaMailSender.send(email);
+//        message = gmailService.users().messages().send(googleOriginMailAddress, message).execute();
 
-        logger.debug("Message id: " + message.getId());
-        logger.debug(message.toPrettyString());
+        logger.debug("Message id: " + email.getSubject());
+        logger.debug(email.getSubject());
 
-        daoImpl.logEmail(client, message.getRaw());
+        daoImpl.logEmail(client, email.getSubject());
 
     }
 
@@ -237,7 +246,10 @@ public class EmailService implements EmailServiceInterf {
                 model.put("renewalCompany", client.getRenewalCompany());
             }
 
-            String mainMessage = VelocityEngineUtils.mergeTemplateIntoString(this.engine,"renewal.vm", "UTF-8",model);
+//            String mainMessage = VelocityEngineUtils.mergeTemplateIntoString(this.velocityEngine,"renewal.vm", "UTF-8",model);
+            Context context = new Context();
+            context.setVariables(model);
+            templateEngine.process("renewal.html",context);
             return mainMessage;
         }
         catch (Exception e) {

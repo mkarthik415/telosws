@@ -1,5 +1,6 @@
 package telosws.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +32,11 @@ public class MailConfiguration {
     @Value("${spring.mail.password}")
     private String password;
 
-    @Bean
-    public JavaMailSender javaMailService() {
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+    @Autowired
+    private JavaMailSenderImpl javaMailSender;
+
+    @Bean(name="javaMailConfig")
+    public JavaMailSender getJavaMailService() {
 
         javaMailSender.setHost(host);
         javaMailSender.setPort(port);
