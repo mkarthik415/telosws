@@ -6,7 +6,7 @@
     Hi Sir/Madam,<br/>
     We wish to inform you, regarding $department policy, bearing Policy No.$policyNumber which stands in the name of $clientName is expiring on $clientPolicyEndDate.
 </p>
-#if ($isRenewalAmount == "true")
+th:if="${$isRenewalAmount == "true")
 <p>
     Your renewal premium works out to Rs.$renewalAmount, please arrange the payment in favour of '$renewalCompany' before expiry of the policy. If already paid please ignore.
 </p>

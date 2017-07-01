@@ -12,7 +12,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import telosws.beans.Clients;
@@ -67,7 +65,7 @@ public class EmailService implements EmailServiceInterf {
     @Value("${google.serviceAccount.id}")
     private String googleServiceAccountId;
 
-    @Value("${google.originMailAddress}")
+    @Value("${spring.mail.from}")
     private String googleOriginMailAddress;
 
     @Autowired
@@ -245,12 +243,9 @@ public class EmailService implements EmailServiceInterf {
                 model.put("renewalAmount", client.getRenewalAmount());
                 model.put("renewalCompany", client.getRenewalCompany());
             }
-
-//            String mainMessage = VelocityEngineUtils.mergeTemplateIntoString(this.velocityEngine,"renewal.vm", "UTF-8",model);
             Context context = new Context();
             context.setVariables(model);
-            templateEngine.process("renewal.html",context);
-            return mainMessage;
+            return templateEngine.process("renewal.html",context);
         }
         catch (Exception e) {
 
