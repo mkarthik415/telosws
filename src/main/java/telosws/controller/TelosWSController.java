@@ -161,7 +161,8 @@ public class TelosWSController {
     @RequestMapping("/mail")
     public Boolean sendEmail(String subject, String data)
     {
-        daoImpl.sendEmails(subject,null);
+        String clientName = daoImpl.findClientByName("karthik").get(0).getClientName();
+        daoImpl.sendEmails(subject,daoImpl.findClientByName("karthik").get(0));
         return false;
     }
 
