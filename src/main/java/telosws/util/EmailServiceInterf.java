@@ -11,5 +11,5 @@ import java.security.GeneralSecurityException;
  */
 public interface EmailServiceInterf {
 
-    public void sendEmails(String subject, Clients client) throws IOException, InterruptedException, GeneralSecurityException, MessagingException;
+    void sendEmails(String subject, Clients client) throws IOException, InterruptedException, GeneralSecurityException, MessagingException;
 }

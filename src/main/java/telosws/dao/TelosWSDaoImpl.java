@@ -96,8 +96,6 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
     List<ChartResults> chartResultses = null;
     private ServletContext servletContext;
 
-    @Autowired
-    private MailSenderImpl mailSender;
 
     @Autowired
     private ExcelHelper excelHelper;

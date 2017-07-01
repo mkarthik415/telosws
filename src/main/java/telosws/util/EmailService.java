@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -56,9 +57,6 @@ public class EmailService implements EmailServiceInterf {
     @Autowired
     private TelosWSDaoImpl daoImpl;
 
-    @Autowired
-    private TemplateEngine templateEngine;
-    
     @Value("${google.p12.path}")
     private String mypath;
 
@@ -69,8 +67,10 @@ public class EmailService implements EmailServiceInterf {
     private String googleOriginMailAddress;
 
     @Autowired
-    @Qualifier("javaMailConfig")
-    private JavaMailSender javaMailSender;
+    private TemplateEngine templateEngine;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     /**
      * View and manage your mail.
@@ -83,7 +83,6 @@ public class EmailService implements EmailServiceInterf {
 
     public void sendEmails(String subject,Clients client) throws IOException, InterruptedException, GeneralSecurityException, MessagingException {
 
-//        Gmail gmailService = getGmailServiceSetup();
 
         List<Document> totalDocuments = daoImpl.searchDocumentsByClient(client);
 
@@ -98,31 +97,6 @@ public class EmailService implements EmailServiceInterf {
 
         daoImpl.logEmail(client, email.getSubject());
 
-    }
-
-    private Gmail getGmailServiceSetup() throws GeneralSecurityException, IOException {
-        final HttpTransport TRANSPORT = _createHttpTransport();
-        final JsonFactory JSON_FACTORY = _createJsonFactory();
-
-        Collection<String> SCOPES = new ArrayList<String>();
-        SCOPES.add(MAIL_GOOGLE_COM);
-
-        Resource resource = resourceLoader.getResource(mypath);
-
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setTransport(TRANSPORT)
-                .setJsonFactory(JSON_FACTORY)
-                .setServiceAccountId(googleServiceAccountId)
-                .setServiceAccountScopes(SCOPES)
-                .setServiceAccountPrivateKeyFromP12File(resource.getFile())
-                .setServiceAccountUser(googleOriginMailAddress)
-                .build();
-
-        credential.refreshToken();
-
-        return new Gmail.Builder(TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName("connect2telos")
-                .build();
     }
 
 
