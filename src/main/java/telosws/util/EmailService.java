@@ -1,25 +1,12 @@
 package telosws.util;
 
-import com.google.api.client.googleapis.GoogleUtils;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -42,7 +29,8 @@ import java.io.*;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by karthikmarupeddi on 9/11/15.
@@ -124,6 +112,7 @@ public class EmailService implements EmailServiceInterf {
             MimeBodyPart messageBodyPart = null;
 
             if (files != null && files.size() >= 0) {
+//                FileUtils.deleteQuietly(tempFile);
                 for (Document file : files) {
                     if (!StringUtils.containsIgnoreCase(file.getFileName(), "MANDATE")) {
                         //Attach files to the message
@@ -140,8 +129,6 @@ public class EmailService implements EmailServiceInterf {
                         messageBodyPart.setFileName(file.getFileName());
                         multipart.addBodyPart(messageBodyPart);
                         message.setContent(multipart);
-
-                        FileUtils.deleteQuietly(tempFile);
                     }
                 }
             }
@@ -163,33 +150,6 @@ public class EmailService implements EmailServiceInterf {
         return message;
     }
 
-
-
-    private static Message createMessageWithEmail(MimeMessage email)
-            throws MessagingException, IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        email.writeTo(baos);
-        String encodedEmail = Base64.encodeBase64URLSafeString(baos.toByteArray());
-        Message message = new Message();
-        message.setRaw(encodedEmail);
-        return message;
-    }
-
-
-    private static HttpTransport _createHttpTransport() throws GeneralSecurityException,
-            IOException {
-        HttpTransport httpTransport = new NetHttpTransport.Builder()
-                .trustCertificates(GoogleUtils.getCertificateTrustStore())
-                .build();
-        return httpTransport;
-    }
-
-    private static JsonFactory _createJsonFactory() {
-        JsonFactory jsonFactory = new JacksonFactory();
-        return jsonFactory;
-    }
-
-
     public String getMessageForRenewals(Clients client)
     {
         try{
@@ -205,21 +165,19 @@ public class EmailService implements EmailServiceInterf {
                 clientName = client.getClientName();
             }
 
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("department", client.getDepartment());
-            model.put("policyNumber", client.getPolicyNumber() );
-            model.put("clientName", clientName);
-            model.put("clientPolicyEndDate", SIMPLE_DATE_FORMAT.format(client.getPolicyEndDate()));
+            Context context = new Context();
+            context.setVariable("department", client.getDepartment());
+            context.setVariable("policyNumber", client.getPolicyNumber() );
+            context.setVariable("clientName", clientName);
+            context.setVariable("clientPolicyEndDate", SIMPLE_DATE_FORMAT.format(client.getPolicyEndDate()));
 
             if(client.getRenewalAmount() != null && client.getRenewalCompany() != null && client.getRenewalAmount() > 0.0)
             {
-                model.put("isRenewalAmount", "true");
-                model.put("renewalAmount", client.getRenewalAmount());
-                model.put("renewalCompany", client.getRenewalCompany());
+                context.setVariable("isRenewalAmount", "true");
+                context.setVariable("renewalAmount", client.getRenewalAmount());
+                context.setVariable("renewalCompany", client.getRenewalCompany());
             }
-            Context context = new Context();
-            context.setVariables(model);
-            return templateEngine.process("renewal.html",context);
+            return templateEngine.process("renewal",context);
         }
         catch (Exception e) {
 

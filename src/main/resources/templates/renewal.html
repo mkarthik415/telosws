@@ -1,16 +1,16 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>Policy Renewal.</head>
 <body>
 <br/>
 <p>
     Hi Sir/Madam,<br/>
-    We wish to inform you, regarding $department policy, bearing Policy No.$policyNumber which stands in the name of $clientName is expiring on $clientPolicyEndDate.
+    
+    We wish to inform you, regarding <span th:text="${department}"/> policy, bearing Policy No.$policyNumber which stands in the name of <span th:text="${clientName}"/> is expiring on <span th:text="${clientPolicyEndDate}"/>.
 </p>
-th:if="${$isRenewalAmount == "true")
-<p>
-    Your renewal premium works out to Rs.$renewalAmount, please arrange the payment in favour of '$renewalCompany' before expiry of the policy. If already paid please ignore.
+
+<p th:if="${isRenewalAmount} == 'true'">
+    Your renewal premium works out to Rs.<span th:text="${$renewalAmount}"/>, please arrange the payment in favour of '<span th:text="${renewalCompany}"/>' before expiry of the policy. If already paid please ignore.
 </p>
-#end
 <p>
     Kindly approach us for effecting renewal without break.
     For further information please contact us on our land line 040-66776677 / 040-23416770 or E-mail us on mail@teloshyd.com.
@@ -19,7 +19,7 @@ th:if="${$isRenewalAmount == "true")
 <br/>
 With regards,<br/>
 <br/>
-M. Narasimha Rao & M.R.G. Raju<br/>
+M. Narasimha Rao and M.R.G. Raju<br/>
 Telos Risk Management and Insurance Broking Services (P) Limited,<br/>
 2nd floor, Status Plaza, Opp.: Greenlands Guest House, Begumpet,<br/>
 Hyderabad - 500016.  Tel- 040-66776677  TeleFax-040-23416770 Mobile 9848021211<br/>
