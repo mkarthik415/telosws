@@ -2,13 +2,13 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
 
 	<classpath>
-		<dir name="/Users/Karthik/Documents/telosws/target/classes">
+		<dir name="/Users/karthikmarupeddi/Documents/workspace/Telos/telosws/target/classes">
 		</dir>
 	</classpath>
 
 	<web>
 		<link target="/">
-			<dir name="/Users/Karthik/Documents/telosws/src/main">
+			<dir name="/Users/karthikmarupeddi/Documents/workspace/Telos/telosws/src/main">
 			</dir>
 		</link>
 	</web>
