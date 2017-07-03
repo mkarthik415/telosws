@@ -1,15 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head>Policy Renewal.</head>
+<head>Policy Renewal Notice.</head>
 <body>
 <br/>
 <p>
     Hi Sir/Madam,<br/>
     
-    We wish to inform you, regarding <span th:text="${department}"/> policy, bearing Policy No.$policyNumber which stands in the name of <span th:text="${clientName}"/> is expiring on <span th:text="${clientPolicyEndDate}"/>.
+    We wish to inform you, regarding your <span th:text="${client.department}"/> policy, bearing Policy No.<span th:text="${client.policyNumber}"/> which stands in the name of <span th:text="${clientName}"/> is expiring on <span th:text="${clientPolicyEndDate}"/>.
 </p>
 
-<p th:if="${isRenewalAmount} == 'true'">
-    Your renewal premium works out to Rs.<span th:text="${$renewalAmount}"/>, please arrange the payment in favour of '<span th:text="${renewalCompany}"/>' before expiry of the policy. If already paid please ignore.
+<p th:if="${client.getRenewalAmount() != null and client.getRenewalCompany() != null and client.getRenewalAmount() gt 0.0}">
+    Your renewal premium works out to Rs.<span th:text="${client.renewalAmount}"/>, please arrange the payment in favour of '<span th:text="${client.renewalCompany}"/>' before expiry of the policy. If already paid please ignore this notice.
 </p>
 <p>
     Kindly approach us for effecting renewal without break.

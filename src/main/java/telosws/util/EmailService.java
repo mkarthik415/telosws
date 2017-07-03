@@ -40,7 +40,7 @@ public class EmailService implements EmailServiceInterf {
 
 
     @Autowired
-    private ResourceLoader resourceLoader;
+    private Util util;
 
     @Autowired
     private TelosWSDaoImpl daoImpl;
@@ -153,30 +153,10 @@ public class EmailService implements EmailServiceInterf {
     public String getMessageForRenewals(Clients client)
     {
         try{
-            String clientName;
-            StringBuffer clientNameBuffer= new StringBuffer(client.getClientName());
-            if(clientNameBuffer.substring(0,4).equalsIgnoreCase("M/S.") )
-            {
-                clientNameBuffer.replace(0,4,"");
-                clientName =clientNameBuffer.toString();
-            }
-            else
-            {
-                clientName = client.getClientName();
-            }
-
             Context context = new Context();
-            context.setVariable("department", client.getDepartment());
-            context.setVariable("policyNumber", client.getPolicyNumber() );
-            context.setVariable("clientName", clientName);
+            context.setVariable("client",client);
+            context.setVariable("clientName", util.getClientName(client));
             context.setVariable("clientPolicyEndDate", SIMPLE_DATE_FORMAT.format(client.getPolicyEndDate()));
-
-            if(client.getRenewalAmount() != null && client.getRenewalCompany() != null && client.getRenewalAmount() > 0.0)
-            {
-                context.setVariable("isRenewalAmount", "true");
-                context.setVariable("renewalAmount", client.getRenewalAmount());
-                context.setVariable("renewalCompany", client.getRenewalCompany());
-            }
             return templateEngine.process("renewal",context);
         }
         catch (Exception e) {

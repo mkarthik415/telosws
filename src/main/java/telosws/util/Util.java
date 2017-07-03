@@ -3,6 +3,7 @@ package telosws.util;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import telosws.beans.Clients;
 import telosws.beans.Document;
 import telosws.beans.File;
 
@@ -75,5 +76,20 @@ public class Util {
         else
             return  Double.valueOf(value).toString();
 
+    }
+
+    public static String getClientName(Clients client) {
+        String clientName;
+        StringBuffer clientNameBuffer= new StringBuffer(client.getClientName());
+        if(clientNameBuffer.substring(0,4).equalsIgnoreCase("M/S.") )
+        {
+            clientNameBuffer.replace(0,4,"");
+            clientName =clientNameBuffer.toString();
+        }
+        else
+        {
+            clientName = client.getClientName();
+        }
+        return clientName;
     }
 }
