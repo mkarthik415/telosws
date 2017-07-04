@@ -16,6 +16,7 @@ hs_err_pid*
 libraries
 artifacts/*
 target
+src/main/resources/rebel.xml
 
 
 
