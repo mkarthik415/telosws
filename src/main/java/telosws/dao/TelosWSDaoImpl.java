@@ -294,7 +294,7 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
             returnDocuments = namedParameterJdbcTemplate.query(
                     GET_DOCUMENTS, searchClientParameters,
                     new DocumentMapping());
-            logger.debug("before documents are------" + returnDocuments.get(1).getFileName());
+            logger.debug("before documents are------" +((returnDocuments.get(0) != null) ? returnDocuments.get(0).getFileName() :"no records found"));
 
 
             for(Document document : returnDocuments)
@@ -440,7 +440,7 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
             returnDocuments = namedParameterJdbcTemplate.query(
                     GET_DOCUMENTS, searchClientParameters,
                     new DocumentMapping());
-            logger.debug("before documents are------" + returnDocuments.get(1).getFileName());
+            logger.debug("before documents are------" + returnDocuments.get(0).getFileName());
         } catch (Exception ex) {
             logger.info("this method is not able to find any files due to an exception", ex);
             return null;
