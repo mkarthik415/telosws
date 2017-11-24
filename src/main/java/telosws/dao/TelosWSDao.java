@@ -38,7 +38,7 @@ public interface TelosWSDao {
 
     public  void logEmail(Clients client, String data);
 
-    public List<Clients> getSMSForRenewals();
+    public List<Clients> getClientsForRenewals();
 
     public Boolean sendSMSToClient(Clients client, String templateType);
 

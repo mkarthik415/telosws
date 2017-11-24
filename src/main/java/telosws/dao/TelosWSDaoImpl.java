@@ -410,11 +410,13 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
         Boolean status = false;
         logger.info("Right before sms and emails are send for renewals");
         returnClients = findClientByEmailId("mkarthik415@gmail.com");
+//        returnClients = getClientsForRenewals();
         if(!returnClients.isEmpty())
         {
             for(Clients client : returnClients)
             {
-                Boolean smsStatus = sendSMSToClient(client,renewalSMS);
+//                Boolean smsStatus = sendSMSToClient(client,renewalSMS);
+                Boolean smsStatus = true;
                 logger.info("SMS Sent Status  "+smsStatus);
                 if(client.getEmail()!= null)
                 {
@@ -450,7 +452,7 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
 
 
     @Override
-    public List<Clients> getSMSForRenewals() {
+    public List<Clients> getClientsForRenewals() {
         try {
             returnClients = jdbcTemplate.query(GET_RENEWAL_CLIENTS, new ClientMapper());
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package telosws.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -85,6 +86,14 @@ public class EmailService implements EmailServiceInterf {
 
         daoImpl.logEmail(client, email.getSubject());
 
+        if (totalDocuments != null && totalDocuments.size() >= 0) {
+            for (Document file : totalDocuments) {
+                if (!StringUtils.containsIgnoreCase(file.getFileName(), "MANDATE")) {
+                    FileUtils.deleteQuietly(new File("temp/"+file.getFileName()));
+                }
+            }
+        }
+
     }
 
 
@@ -119,7 +128,7 @@ public class EmailService implements EmailServiceInterf {
                          messageBodyPart = new MimeBodyPart();
 
                         //create tempfile
-                        File tempFile = new File(file.getFileName());
+                        File tempFile = new File("temp/"+file.getFileName());
                         InputStream in = file.getScanned().getBinaryStream();
                         OutputStream outputStream = new FileOutputStream(tempFile);
                         IOUtils.copy(in, outputStream);
@@ -174,7 +183,7 @@ public class EmailService implements EmailServiceInterf {
             if(client.getRenewalAmount() != null && client.getRenewalCompany() != null && client.getRenewalAmount() > 0.0)
             {
                 context.setVariable("isRenewalAmount", "true");
-                context.setVariable("renewalAmount", client.getRenewalAmount());
+                context.setVariable("renewalAmount", client.getRenewalAmount().toString());
                 context.setVariable("renewalCompany", client.getRenewalCompany());
             }
             return templateEngine.process("renewal",context);

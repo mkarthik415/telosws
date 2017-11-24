@@ -175,10 +175,10 @@ public class TelosWSController {
 
     }
 
-    @RequestMapping("/getSMSForRenewals")
-    public List<Clients> sendSMSForRenewal()
+    @RequestMapping("/getClientsForRenewal")
+    public List<Clients> getClientsForRenewal()
     {
-        return daoImpl.getSMSForRenewals();
+        return daoImpl.getClientsForRenewals();
     }
 
 
@@ -190,9 +190,10 @@ public class TelosWSController {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = 5000, zone = "Asia/")
+    @Scheduled(fixedRate = 5000, zone = "Asia/Kolkata")
     public void reportCurrentTime() {
         System.out.println("The time is now " + dateFormat.format(new Date()));
+//        sendEmail(null, null);
     }
 
 }

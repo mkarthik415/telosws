@@ -67,7 +67,7 @@ public class SMSLane{
             logger.log(Level.SEVERE, " log message to be sent for documents::: "+DOCUMENTS_MESSAGE);
             String rsp="";
             String user= "teloshyd";
-            String password = "hydtelos";
+            String password = "!2LalithaRao";
             String sid = "TELOSH";
             String fl = "0";
             String gwid = "2";

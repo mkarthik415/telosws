@@ -5,12 +5,13 @@
 <p>
     Hi Sir/Madam,<br/>
     
-    We wish to inform you, regarding <span th:text="${department}"/> policy, bearing Policy No.$policyNumber which stands in the name of <span th:text="${clientName}"/> is expiring on <span th:text="${clientPolicyEndDate}"/>.
+    We wish to inform you, regarding your <span th:text="${department}"/> policy, bearing Policy No.<span th:text="${policyNumber}"/> which stands in the name of <span th:text="${clientName}"/> is expiring on <span th:text="${clientPolicyEndDate}"/>.
 </p>
 
-<p th:if="${isRenewalAmount} == 'true'">
-    Your renewal premium works out to Rs.<span th:text="${$renewalAmount}"/>, please arrange the payment in favour of '<span th:text="${renewalCompany}"/>' before expiry of the policy. If already paid please ignore.
-</p>
+<span th:if="${isRenewalAmount} == 'true'" th:text="Your renewal premium works out to Rs. ${renewalAmount}" ></span>
+
+<!--<p th:if="${isRenewalAmount} == 'true'" th:text="Your renewal premium works out to Rs.${renewalAmount}, please arrange the payment in favour of ${renewalCompany} before expiry of the policy. If already paid please ignore." />-->
+
 <p>
     Kindly approach us for effecting renewal without break.
     For further information please contact us on our land line 040-66776677 / 040-23416770 or E-mail us on mail@teloshyd.com.
