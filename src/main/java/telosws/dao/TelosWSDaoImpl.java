@@ -300,7 +300,7 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
     }
 
     @Override
-    public List<Document> getDocumentsById(Integer id) {
+    public List<Document> getDocumentsById(int id) {
         logger.debug("inside search implementation method of find documents for client with his ID");
         MapSqlParameterSource searchClientParameters = new MapSqlParameterSource();
         searchClientParameters.addValue("clientId", id);

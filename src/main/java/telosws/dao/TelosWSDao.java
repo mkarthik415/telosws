@@ -29,7 +29,7 @@ public interface TelosWSDao {
 
     public List<Document> findDocumentsByClient(int id);
 
-    public List<Document> getDocumentsById(Integer id);
+    public List<Document> getDocumentsById(int id);
 
     public List<Clients> findAllClients();
 

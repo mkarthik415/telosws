@@ -127,7 +127,7 @@ public class TelosWSController {
     public List<Document> getDocumentsById(int id)
     {
 
-        return daoImpl.findDocumentsByClient(id);
+        return daoImpl.getDocumentsById(id);
 
 
     }
