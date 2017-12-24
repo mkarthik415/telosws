@@ -1,5 +1,7 @@
 package telosws.dao;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +23,11 @@ import telosws.mapping.DocumentMapping;
 import telosws.mapping.UserMapper;
 import telosws.util.*;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -307,8 +313,25 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
         logger.debug("before documents search query being executed for client id-----" + id);
         try {
             returnDocuments = namedParameterJdbcTemplate.query(
-                    GET_DOCUMENTS, searchClientParameters,
+                    GET_DOCUMENTS_BY_ID, searchClientParameters,
                     new DocumentMapping());
+
+
+            if (returnDocuments != null && returnDocuments.size() >= 0) {
+//                FileUtils.deleteQuietly(tempFile);
+                for (Document file : returnDocuments) {
+                    if (!StringUtils.containsIgnoreCase(file.getFileName(), "MANDATE")) {
+                        //create tempfile
+                        File tempFile = new File("temp/"+file.getFileName());
+                        InputStream in = file.getScanned().getBinaryStream();
+                        OutputStream outputStream = new FileOutputStream(tempFile);
+                        IOUtils.copy(in, outputStream);
+                        String mypath = tempFile.getAbsolutePath();
+                        System.out.println("the path of the file is "+mypath);
+                        DataSource source = new FileDataSource(tempFile);
+                    }
+                }
+            }
 
             return returnDocuments;
         } catch (Exception ex) {

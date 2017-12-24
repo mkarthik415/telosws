@@ -25,7 +25,7 @@ public class TelosWSController {
 
 
     @Autowired
-    TelosWSDaoImpl  daoImpl;
+    TelosWSDaoImpl daoImpl;
 
     @Autowired
     Util util;
@@ -115,8 +115,7 @@ public class TelosWSController {
     }
 
     @RequestMapping("/documentsByClient")
-    public List<Document> getDocuments(int id)
-    {
+    public List<Document> getDocuments(int id) {
 
         return daoImpl.findDocumentsByClient(id);
 
@@ -124,8 +123,7 @@ public class TelosWSController {
     }
 
     @RequestMapping("/documentsById")
-    public List<Document> getDocumentsById(int id)
-    {
+    public List<Document> getDocumentsById(int id) {
 
         return daoImpl.getDocumentsById(id);
 
@@ -140,10 +138,8 @@ public class TelosWSController {
 //    }
 
 
-
     @RequestMapping("/update")
-    public String getUpdateStatments(String location)
-    {
+    public String getUpdateStatments(String location) {
 
         String documentsList = daoImpl.loadData(location);
         return documentsList;
@@ -151,55 +147,48 @@ public class TelosWSController {
     }
 
     @RequestMapping("/echo")
-    public String echoName(String name)  {
+    public String echoName(String name) {
 
-        try
-        {
+        try {
 
             //URL resourceUrl = getClass().getResource("/static");
 //            File file = new File("/var/lib/openshift/54d6bc064382ec06910000bd/app-root/repo/src/main/resources/static/text.xml");
 //            OutputStream outputStream = new FileOutputStream(file);
-            return "hi hi hi hi "+name ;
-        }
-        catch (Exception e)
-        {
-            return "Exception"+e;
+            return "hi hi hi hi " + name;
+        } catch (Exception e) {
+            return "Exception" + e;
         }
     }
 
 
     @RequestMapping("/mail")
-    public Boolean sendEmail(String subject, String data)
-    {
-        daoImpl.sendEmails(subject,daoImpl.findClientByName("sravani rampay").get(0));
+    public Boolean sendEmail(String subject, String data) {
+        daoImpl.sendEmails(subject, daoImpl.findClientByName("sravani rampay").get(0));
         return false;
     }
 
     @RequestMapping("/getChartTypeOfPolicies")
-    public List<telosws.beans.ChartResults> getChartTypeOfPolicies(Integer fromYear, Integer toYear)
-    {
+    public List<telosws.beans.ChartResults> getChartTypeOfPolicies(Integer fromYear, Integer toYear) {
 
-        return daoImpl.resultForTypesOfPolicies(fromYear,toYear);
+        return daoImpl.resultForTypesOfPolicies(fromYear, toYear);
 
 
     }
 
     @RequestMapping("/getClientsForRenewal")
-    public List<Clients> getClientsForRenewal()
-    {
+    public List<Clients> getClientsForRenewal() {
         return daoImpl.getClientsForRenewals();
     }
 
 
     @RequestMapping("/getSMSAndEMailsRenewals")
-    public Boolean getSMSAndEMailsRenewals()
-    {
-         return daoImpl.sendSMSAndEMailForRenewal();
+    public Boolean getSMSAndEMailsRenewals() {
+        return daoImpl.sendSMSAndEMailForRenewal();
     }
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-   /* @Scheduled(fixedRate = 5000, zone = "Asia/Kolkata")*/
+    /* @Scheduled(fixedRate = 5000, zone = "Asia/Kolkata")*/
     public void reportCurrentTime() {
         System.out.println("The time is now " + dateFormat.format(new Date()));
 //        sendEmail(null, null);
