@@ -1,9 +1,5 @@
 package telosws.dao;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +24,6 @@ import telosws.util.*;
 import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import java.io.*;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +50,9 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
 
     @Value( "${GET_DOCUMENTS}" )
     private String GET_DOCUMENTS;
+
+    @Value( "${GET_DOCUMENTS_BY_ID}" )
+    private String GET_DOCUMENTS_BY_ID;
 
     @Value( "${GET_VEHICLE_NUM_SQL}" )
     private String GET_VEHICLE_NUM_SQL;
@@ -284,41 +282,35 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
     }
 
     @Override
-    public List<telosws.beans.File> findDocumentsByClient(Integer id) {
+    public List<Document> findDocumentsByClient(Integer id) {
         logger.debug("inside search implementation method of find documents for client with his ID");
         MapSqlParameterSource searchClientParameters = new MapSqlParameterSource();
         searchClientParameters.addValue("clientId", id);
         logger.debug("before documents search query being executed for client id-----" + id);
-        files = new ArrayList<telosws.beans.File>();
         try {
             returnDocuments = namedParameterJdbcTemplate.query(
                     GET_DOCUMENTS, searchClientParameters,
                     new DocumentMapping());
-            logger.debug("before documents are------" +((returnDocuments.get(0) != null) ? returnDocuments.get(0).getFileName() :"no records found"));
 
+            return returnDocuments;
+        } catch (Exception ex) {
+            logger.info("this method is not able to find any files due to an exception",ex);
+            return null;
+        }
+    }
 
-            for(Document document : returnDocuments)
-            {
+    @Override
+    public List<Document> getDocumentsById(Integer id) {
+        logger.debug("inside search implementation method of find documents for client with his ID");
+        MapSqlParameterSource searchClientParameters = new MapSqlParameterSource();
+        searchClientParameters.addValue("clientId", id);
+        logger.debug("before documents search query being executed for client id-----" + id);
+        try {
+            returnDocuments = namedParameterJdbcTemplate.query(
+                    GET_DOCUMENTS, searchClientParameters,
+                    new DocumentMapping());
 
-                InputStream in = document.getScanned().getBinaryStream();
-                File file = new File(document.getFileName());
-                OutputStream out = new FileOutputStream(document.getFileName());
-                IOUtils.copy(in, out);
-                s3CloudConnector.getConnection();
-                s3CloudConnector.getS3Connection().putObject("teloshyd", document.getFileName(), file);
-                s3CloudConnector.getS3Connection().setObjectAcl("teloshyd", document.getFileName(), CannedAccessControlList.PublicRead);
-                GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                        new GeneratePresignedUrlRequest("teloshyd", document.getFileName());
-                generatePresignedUrlRequest.setMethod(HttpMethod.GET);
-                URL url = s3CloudConnector.getS3Connection().generatePresignedUrl(generatePresignedUrlRequest);
-                telosws.beans.File uploadedFile = new telosws.beans.File();
-                uploadedFile.setId(document.getId());
-                uploadedFile.setFileName(document.getFileName());
-                uploadedFile.setUrl(url.toString());
-                files.add(uploadedFile);
-            }
-
-            return files;
+            return returnDocuments;
         } catch (Exception ex) {
             logger.info("this method is not able to find any files due to an exception",ex);
             return null;

@@ -1,10 +1,11 @@
 package telosws.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import telosws.beans.Clients;
+import telosws.beans.Document;
 import telosws.beans.Greeting;
 import telosws.beans.User;
 import telosws.dao.TelosWSDaoImpl;
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by karthikmarupeddi on 2/5/15.
  */
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class TelosWSController {
 
@@ -114,7 +115,16 @@ public class TelosWSController {
     }
 
     @RequestMapping("/documentsByClient")
-    public List<telosws.beans.File> getDocuments(Integer id)
+    public List<Document> getDocuments(Integer id)
+    {
+
+        return daoImpl.findDocumentsByClient(id);
+
+
+    }
+
+    @RequestMapping("/documentsById")
+    public List<Document> getDocumentsById(Integer id)
     {
 
         return daoImpl.findDocumentsByClient(id);
@@ -189,7 +199,7 @@ public class TelosWSController {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = 5000, zone = "Asia/Kolkata")
+   /* @Scheduled(fixedRate = 5000, zone = "Asia/Kolkata")*/
     public void reportCurrentTime() {
         System.out.println("The time is now " + dateFormat.format(new Date()));
 //        sendEmail(null, null);

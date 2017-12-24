@@ -1,6 +1,7 @@
 package telosws.dao;
 
 import telosws.beans.Clients;
+import telosws.beans.Document;
 import telosws.beans.User;
 
 import java.util.List;
@@ -26,7 +27,9 @@ public interface TelosWSDao {
 
     public List<Clients> findClientByStartDate(String name);
 
-    public List<telosws.beans.File> findDocumentsByClient(Integer id);
+    public List<Document> findDocumentsByClient(Integer id);
+
+    public List<Document> getDocumentsById(Integer id);
 
     public List<Clients> findAllClients();
 
