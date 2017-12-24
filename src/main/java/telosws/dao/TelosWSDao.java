@@ -27,7 +27,7 @@ public interface TelosWSDao {
 
     public List<Clients> findClientByStartDate(String name);
 
-    public List<Document> findDocumentsByClient(Integer id);
+    public List<Document> findDocumentsByClient(int id);
 
     public List<Document> getDocumentsById(Integer id);
 

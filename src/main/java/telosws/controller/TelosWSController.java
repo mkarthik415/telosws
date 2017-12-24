@@ -115,7 +115,7 @@ public class TelosWSController {
     }
 
     @RequestMapping("/documentsByClient")
-    public List<Document> getDocuments(Integer id)
+    public List<Document> getDocuments(int id)
     {
 
         return daoImpl.findDocumentsByClient(id);
@@ -124,7 +124,7 @@ public class TelosWSController {
     }
 
     @RequestMapping("/documentsById")
-    public List<Document> getDocumentsById(Integer id)
+    public List<Document> getDocumentsById(int id)
     {
 
         return daoImpl.findDocumentsByClient(id);
