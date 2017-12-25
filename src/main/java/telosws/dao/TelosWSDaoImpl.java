@@ -30,7 +30,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.servlet.ServletContext;
 import java.io.*;
+import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,13 +324,15 @@ public class TelosWSDaoImpl implements TelosWSDao,ServletContextAware {
                 for (Document file : returnDocuments) {
                     if (!StringUtils.containsIgnoreCase(file.getFileName(), "MANDATE")) {
                         //create tempfile
-                        File tempFile = new File("temp/"+file.getFileName());
-                        InputStream in = file.getScanned().getBinaryStream();
-                        OutputStream outputStream = new FileOutputStream(tempFile);
-                        IOUtils.copy(in, outputStream);
-                        String mypath = tempFile.getAbsolutePath();
-                        System.out.println("the path of the file is "+mypath);
-                        DataSource source = new FileDataSource(tempFile);
+                        Blob blob = file.getScanned();
+                        String fileName = file.getFileName() ;
+                        InputStream in = blob.getBinaryStream();
+                        int fileLength = in.available();
+                        OutputStream out = new FileOutputStream(this.servletContext.getRealPath("/")+fileName);
+                        logger.info("location of the file is "+this.servletContext.getRealPath("/")+fileName,this.servletContext.getRealPath("/")+fileName);
+                        byte[] buff = blob.getBytes(1,fileLength);
+                        out.write(buff);
+                        out.close();
                     }
                 }
             }
