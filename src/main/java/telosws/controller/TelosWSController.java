@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import telosws.beans.Clients;
-import telosws.beans.Document;
-import telosws.beans.Greeting;
-import telosws.beans.User;
+import telosws.beans.*;
 import telosws.dao.TelosWSDaoImpl;
 import telosws.util.Util;
 
@@ -59,7 +56,7 @@ public class TelosWSController {
 
 
     @RequestMapping("/byName")
-    public List<Clients> byName(String name) {
+    public List<TouchClients> byName(String name) {
 
         return daoImpl.findClientByName(name);
 
@@ -72,12 +69,12 @@ public class TelosWSController {
 
     }
 
-    @RequestMapping("/startDate")
-    public List<Clients> startDate(String name) {
-
-        return daoImpl.findClientByName(name);
-
-    }
+//    @RequestMapping("/startDate")
+//    public List<Clients> startDate(String name) {
+//
+//        return daoImpl.findClientByName(name);
+//
+//    }
 
     @RequestMapping("/byPolicyNumber")
     public List<Clients> byPolicyNumber(String policyNumber) {
@@ -161,11 +158,11 @@ public class TelosWSController {
     }
 
 
-    @RequestMapping("/mail")
-    public Boolean sendEmail(String subject, String data) {
-        daoImpl.sendEmails(subject, daoImpl.findClientByName("sravani rampay").get(0));
-        return false;
-    }
+//    @RequestMapping("/mail")
+//    public Boolean sendEmail(String subject, String data) {
+//        daoImpl.sendEmails(subject, daoImpl.findClientByName("sravani rampay").get(0));
+//        return false;
+//    }
 
     @RequestMapping("/getChartTypeOfPolicies")
     public List<telosws.beans.ChartResults> getChartTypeOfPolicies(Integer fromYear, Integer toYear) {

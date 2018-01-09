@@ -2,6 +2,7 @@ package telosws.dao;
 
 import telosws.beans.Clients;
 import telosws.beans.Document;
+import telosws.beans.TouchClients;
 import telosws.beans.User;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface TelosWSDao {
 
     public List<User> findUser(String user, String password);
 
-    public List<Clients> findClientByName(String name);
+    public List<TouchClients> findClientByName(String name);
 
     public List<Clients> findClientByVehicleNumber(String vehicleNumber);
 

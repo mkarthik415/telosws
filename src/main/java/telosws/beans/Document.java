@@ -11,6 +11,7 @@ public class Document {
     private String fileName;
     private String fileDescption;
     private Blob scanned;
+    private String url;
 
     public Document(Integer id, String fileName, String fileDescption, Blob scanned) {
         this.id = id;
@@ -49,5 +50,13 @@ public class Document {
 
     public void setScanned(Blob scanned) {
         this.scanned = scanned;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
